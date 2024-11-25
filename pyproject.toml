@@ -1,0 +1,92 @@
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.7.4"
+pydantic-settings = "^2.3.3"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.30"}
+asyncpg = "^0.30.0"
+alembic = "^1.13.1"
+bs4 = "^0.0.2"
+aiohttp = "^3.10.10"
+aiogram = "^3.14.0"
+loguru = "^0.7.2"
+mypy = "^1.13.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "0.6.8"
+
+
+[tool.ruff]
+src = ["src/*", "tests/*"]
+exclude = [
+    "app/alembic/*",
+]
+line-length = 120
+indent-width = 4
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "A",       # https://docs.astral.sh/ruff/rules/#flake8-builtins-a
+    "E", "W",  # https://docs.astral.sh/ruff/rules/#pycodestyle-e-w
+    "F",       # https://docs.astral.sh/ruff/rules/#pyflakes-f
+    "B",       # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+    "Q",       # https://docs.astral.sh/ruff/rules/#flake8-quotes-q
+    "PL",      # https://docs.astral.sh/ruff/rules/#pylint-pl
+    "COM",     # https://docs.astral.sh/ruff/rules/#flake8-commas-com
+    "SIM",     # https://docs.astral.sh/ruff/rules/#flake8-simplify-sim
+    "ERA",     # https://docs.astral.sh/ruff/rules/#eradicate-era
+    "PERF",    # https://docs.astral.sh/ruff/rules/#perflint-perf
+    "FURB",    # https://docs.astral.sh/ruff/rules/#refurb-furb
+    "ASYNC",   # https://docs.astral.sh/ruff/rules/#flake8-async-async
+    "C4",      # https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
+    "T20",     # https://docs.astral.sh/ruff/rules/#flake8-print-t20
+]
+ignore = [
+    "PLC2701",  # https://docs.astral.sh/ruff/rules/import-private-name/
+    "PLR6301",  # https://docs.astral.sh/ruff/rules/no-self-use/
+     "E402",
+     "F403",
+    "SIM117",
+]
+preview = true  # https://docs.astral.sh/ruff/preview/#enabling-preview-mode
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+detect-same-package = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]    # imported but unused
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.mypy]
+warn_return_any = true
+warn_no_return = false
+warn_unused_configs = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+pretty = "True"
+enable_error_code = [
+    "ignore-without-code",
+]
+disable_error_code = [
+    "prop-decorator",
+]
+plugins = [
+    "pydantic.mypy",
+    "sqlalchemy.ext.mypy.plugin",
+]
+    [[tool.mypy.overrides]]
+    module = [
+        "src.migrations.*",
+        "auth_lib.*",
+    ]
+    ignore_errors = true
